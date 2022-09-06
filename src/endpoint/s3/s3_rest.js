@@ -194,6 +194,8 @@ function authenticate_request(req) {
 async function authorize_request(req) {
     await Promise.all([
         req.object_sdk.authorize_request_account(req),
+        // authorize_request_policy(req) is supposed to
+        // allow owners access unless there is an explicit DENY policy
         authorize_request_policy(req)
     ]);
 }
