@@ -664,7 +664,7 @@ function _get_auth_info(account, system, authorized_by, role, extra) {
 function has_bucket_action_permission(bucket, account, action, bucket_path = "") {
     dbg.log0('has_bucket_action_permission:', bucket.name, account.email, bucket.owner_account.email);
     const is_owner = (bucket.owner_account.email.unwrap() === account.email.unwrap()) ||
-        (account.bucket_claim_owner && account.bucket_claim_owner.unwrap() === bucket.name.unwrap());
+        (account.bucket_claim_owner && account.bucket_claim_owner.name.unwrap() === bucket.name.unwrap());
     const bucket_policy = bucket.s3_policy;
 
     if (!bucket_policy) return is_owner;
