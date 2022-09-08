@@ -1190,7 +1190,7 @@ function get_account_info(account, include_connection_cache) {
         info.next_password_change = account.next_password_change.getTime();
     }
 
-    info.has_s3_access = Boolean(account.s3_access);
+    info.has_s3_access = Boolean(account.default_resource);
     if (info.has_s3_access) {
         info.default_resource = account.default_resource.name;
         info.can_create_buckets = account.allow_bucket_creation;
