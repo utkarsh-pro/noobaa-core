@@ -1,5 +1,5 @@
 /* Copyright (C) 2020 NooBaa */
-/*eslint max-lines-per-function: ["error", 500]*/
+/*eslint max-lines-per-function: ["error", 600]*/
 'use strict';
 
 
@@ -318,7 +318,7 @@ mocha.describe('bucket operations - namespace_fs', function() {
     });
 
     mocha.it('list buckets with uid, gid', async function() {
-        // Give s3_wrong_uid access to the required buckets
+        // Give s3_correct_uid access to the required buckets
         await Promise.all(
           [bucket_name]
             .map(bucket => test_utils.generate_s3_policy('account_correct_uid@noobaa.com', bucket, ["s3:*"]))
@@ -355,6 +355,18 @@ mocha.describe('bucket operations - namespace_fs', function() {
     mocha.it('list parts with wrong uid gid', async function() {
         // eslint-disable-next-line no-invalid-this
         this.timeout(600000);
+
+        // Give s3_correct_uid access to the required buckets
+        await Promise.all(
+          [bucket_name]
+            .map(bucket => test_utils.generate_s3_policy('account_correct_uid@noobaa.com', bucket, ["s3:*"]))
+            .map(generated =>
+              rpc_client.bucket.put_bucket_policy({
+                name: generated.params.bucket,
+                policy: generated.policy,
+              })
+            )
+        );
 
         const res1 = await s3_correct_uid.createMultipartUpload({
             Bucket: bucket_name,
@@ -690,6 +702,17 @@ mocha.describe('list objects - namespace_fs', function() {
     });
 
     mocha.it('put object 1 with uid gid - 5', async function() {
+        await Promise.all(
+          [bucket_name]
+            .map(bucket => test_utils.generate_s3_policy('account_wrong_uid_list@noobaa.com', bucket, ["s3:*"]))
+            .map(generated =>
+              rpc_client.bucket.put_bucket_policy({
+                name: generated.params.bucket,
+                policy: generated.policy,
+              })
+            )
+        );
+
         let res = await s3_uid5.putObject({ Bucket: bucket_name, Key: 'only5_1', Body: 'AAAABBBBBCCCCCCDDDDD' }).promise();
         console.log(inspect(res));
         res = await s3_uid5.putObject({ Bucket: bucket_name, Key: 'dir1/only5_2', Body: 'AAAABBBBBCCCCCCDDDDD' }).promise();
@@ -705,16 +728,49 @@ mocha.describe('list objects - namespace_fs', function() {
         assert.ok(stat1.mode === 16888 && stat2.mode === 33272);
     });
     mocha.it('list object - with correct uid gid - 5', async function() {
+        await Promise.all(
+          [bucket_name]
+            .map(bucket => test_utils.generate_s3_policy('account_wrong_uid_list@noobaa.com', bucket, ["s3:*"]))
+            .map(generated =>
+              rpc_client.bucket.put_bucket_policy({
+                name: generated.params.bucket,
+                policy: generated.policy,
+              })
+            )
+        );
+
         const res = await s3_uid5.listObjects({ Bucket: bucket_name }).promise();
         assert.ok(object_in_list(res, 'dir1/only5_2') && object_in_list(res, 'only5_1'));
     });
 
     mocha.it('list object - with correct uid gid - 6', async function() {
+        await Promise.all(
+            [bucket_name]
+              .map(bucket => test_utils.generate_s3_policy('account_correct_uid_list1@noobaa.com', bucket, ["s3:*"]))
+              .map(generated =>
+                rpc_client.bucket.put_bucket_policy({
+                  name: generated.params.bucket,
+                  policy: generated.policy,
+                })
+              )
+        );
+
         const res = await s3_uid6.listObjects({ Bucket: bucket_name }).promise();
         assert.ok(!object_in_list(res, 'dir1/only5_2') && object_in_list(res, 'only5_1'));
     });
 
     mocha.it('list object - with correct uid gid - 26041993', async function() {
+        await Promise.all(
+            [bucket_name]
+              .map(bucket => test_utils.generate_s3_policy('account_correct_uid_list@noobaa.com', bucket, ["s3:*"]))
+              .map(generated =>
+                rpc_client.bucket.put_bucket_policy({
+                  name: generated.params.bucket,
+                  policy: generated.policy,
+                })
+              )
+        );
+
         const res = await s3_uid26041993.listObjects({ Bucket: bucket_name }).promise();
         assert.ok(!object_in_list(res, 'dir1/only5_2') && object_in_list(res, 'only5_1'));
     });

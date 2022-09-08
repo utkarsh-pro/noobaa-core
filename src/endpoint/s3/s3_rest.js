@@ -233,7 +233,7 @@ async function authorize_request_policy(req) {
         throw new S3Error(S3Error.AccessDenied);
     }
 
-    const permission = s3_utils.has_bucket_policy_permission(s3_policy, account, method, arn_path);
+    const permission = s3_utils.has_bucket_policy_permission(s3_policy, account.email.unwrap(), method, arn_path);
     if (permission === "DENY") throw new S3Error(S3Error.AccessDenied);
     if (permission === "ALLOW" || is_owner) return;
 

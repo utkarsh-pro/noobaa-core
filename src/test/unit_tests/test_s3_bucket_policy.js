@@ -35,7 +35,7 @@ const anon_access_policy = {
     Statement: [{
         Effect: 'Allow',
         Principal: { AWS: "*" },
-        Action: ['s3:GetObject'],
+        Action: ['s3:GetObject', 's3:ListBucket'],
         Resource: [`arn:aws:s3:::*`]
     }]
 };

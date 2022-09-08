@@ -115,7 +115,7 @@ mocha.describe('STS tests', function() {
                 effect: 'allow',
                 principal: [user_a, user_b, user_c],
                 action: ['s3:*'],
-                resource: ['arn:aws:s3:::first.bucket/*'],
+                resource: ['arn:aws:s3:::first.bucket/*', 'arn:aws:s3:::first.bucket'],
             }]
         };
         const user_a_keys = (await rpc_client.account.create_account(account)).access_keys;

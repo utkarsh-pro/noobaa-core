@@ -604,7 +604,7 @@ function _prepare_auth_request(req) {
         // We need to check the anonymous permission only when the bucket is configured to server anonymous requests
         // In case of anonymous function but with authentication flow we roll back to previous code and not return here
         if (req.auth_token && typeof req.auth_token === 'object') {
-            return req.check_bucket_action_permission(bucket, action, bucket_path);
+            return req.has_bucket_action_permission(bucket, action, bucket_path);
         }
         // If we came with a NooBaa management token then we've already checked the method permissions prior to this function
         // There is nothing specific to bucket permissions for the management credentials
@@ -624,6 +624,10 @@ function _prepare_auth_request(req) {
         if (!has_bucket_action_permission(bucket, req.account, action, bucket_path)) {
             throw new RpcError('UNAUTHORIZED', 'No permission to access bucket');
         }
+    };
+
+    req.has_bucket_action_permission = function(bucket, action, bucket_path) {
+        return has_bucket_action_permission(bucket, req.account, action, bucket_path);
     };
 }
 
