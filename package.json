@@ -104,7 +104,7 @@
     "node-abort-controller": "3.0.1",
     "node-addon-api": "4.3.0",
     "node-df": "0.1.4",
-    "node-gyp": "8.4.1",
+    "node-gyp": "9.1.0",
     "performance-now": "2.1.0",
     "pg": "8.8.0",
     "prom-client": "14.1.0",
