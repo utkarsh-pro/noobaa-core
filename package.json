@@ -72,7 +72,7 @@
     "@azure/storage-blob": "12.11.0",
     "@google-cloud/storage": "5.20.5",
     "ajv": "8.11.0",
-    "aws-sdk": "2.1215.0",
+    "aws-sdk": "2.1216.0",
     "azure-storage": "2.10.5",
     "bcrypt": "5.0.1",
     "big-integer": "1.6.51",
@@ -142,7 +142,7 @@
     "nyc": "15.1.0",
     "pkg": "5.8.0",
     "prebuild-install": "7.1.1",
-    "sinon": "13.0.2",
+    "sinon": "14.0.0",
     "wtfnode": "0.9.1"
   }
 }
