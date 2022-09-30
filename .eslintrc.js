@@ -348,5 +348,9 @@ module.exports = {
 
         //Allow spacing between template tags and their literals
         'template-tag-spacing': 'off',
+
+        // Disable the rule for now, as it's not compatible with the current codebase
+        // enforced by default in eslint 8.24.0
+        'logical-assignment-operators': 'off',
     }
 };
